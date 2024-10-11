@@ -1,0 +1,40 @@
+name: Validation for push on back-end
+
+on:
+  push:
+    branches-ignore:
+      - production
+      - main
+    paths:
+      - "backend/**"
+jobs:
+  lint_backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install dependences
+        run: cd backend && npm install
+      - name: Run eslint
+        run: cd backend && npm run lint
+      - name: check-lint
+        if: failure()
+        run: echo "Eslint encontrou observacoes no codigo, revisar!!"
+  test_backend:
+    needs: lint_backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install dependences
+        run: cd backend && npm install
+      - name: Run jest
+        run: cd backend && export PRISMA_QUERY_ENGINE_LIBRARY="node_modules/.prisma/client/libquery_engine-debian-openssl-1.1.x.so.node" && npm run test --verbose

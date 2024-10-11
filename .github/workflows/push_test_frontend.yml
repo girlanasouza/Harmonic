@@ -1,0 +1,42 @@
+
+name: Validation for push on front-end
+
+on:
+  push:
+    branches-ignore:
+      - production
+      - main
+    paths:
+      - "frontend/**"
+
+jobs:
+  lint_frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install dependences
+        run: cd frontend && npm install
+      - name: Run eslint
+        run: cd frontend && npm run lint
+      - name: check-lint
+        if: failure()
+        run: echo "Eslint encontrou observacoes no codigo, revisar!!"
+  test_frontend:
+    needs: lint_frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install dependences
+        run: cd frontend && npm install
+      - name: Run jest
+        run: cd frontend && export PRISMA_QUERY_ENGINE_LIBRARY="node_modules/.prisma/client/libquery_engine-debian-openssl-1.1.x.so.node" && npm run test --verbose

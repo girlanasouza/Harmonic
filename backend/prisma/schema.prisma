@@ -1,0 +1,147 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x", "debian-openssl-1.1.x"]
+  previewFeatures = ["fullTextSearch"]
+}
+
+model User {
+  id String @id @default(uuid())
+  name String @db.VarChar(100)
+  email String @unique @db.VarChar(100)
+  password String @db.Char(60)
+  url_img_profile String @db.VarChar(100)
+  birth DateTime  @db.Date()
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  playlists Playlist[]
+  recommendations Recomendations[]
+  @@map("users")
+}
+
+
+model Music {
+  id         String      @id @default(uuid())
+  title      String      @db.VarChar(300)
+  url_music  String      @db.VarChar(100)
+  duration   Decimal     @db.Decimal(10,2)
+  year       DateTime    @default(now())
+  explicit   Boolean
+  song_type  String      @db.VarChar(25)
+  
+  musicAlbum MusicAlbum[]
+  playlistSongs PlaylistSongs[]
+  
+  @@map("songs")
+}
+
+model Album {
+  id         String       @id @default(uuid())
+  name       String       @db.VarChar(300)
+  type       String       @db.VarChar(100)
+  release_year DateTime   @db.Date()
+  image_url   String      @db.VarChar(150)
+  total_tracks Int        @db.Integer()
+  artistAlbum ArtistAlbum[]
+  musicAlbum MusicAlbum[]
+
+  @@map("albums")
+}
+
+model MusicAlbum {
+  musicId String @unique
+  music   Music  @relation(fields: [musicId], references: [id])
+  albumId String
+  album   Album  @relation(fields: [albumId], references: [id])
+  
+  @@id([musicId, albumId])
+}
+
+model Artist {
+  id          String        @id @default(uuid())
+  name        String        @db.VarChar(100)
+  image_url   String        @db.VarChar(150)
+  artist_type String        @db.VarChar(100)
+  main_genre  String        @db.VarChar()
+  genres      String        @db.VarChar()
+
+  artistAlbum ArtistAlbum[]
+  followedBy  Artist[]     @relation("ArtistFollows")
+  following   Artist[]     @relation("ArtistFollows")
+
+  @@map("artists")
+}
+
+model ArtistAlbum {
+  albumId  String
+  album    Album  @relation(fields: [albumId], references: [id])
+  artistId String
+  artist   Artist @relation(fields: [artistId], references: [id])
+
+  @@id([albumId, artistId])
+}
+
+model Playlist {
+  id  String @id @default(uuid())
+  title String @db.VarChar(50)
+  describe String? @db.VarChar(200)
+  url_cover String? @db.VarChar(100)
+  is_recomendation Boolean @default(false)
+  is_active Boolean @default(true)
+
+
+  userId String
+  user  User @relation(fields: [userId], references: [id])
+  playlistSongs PlaylistSongs[]
+
+  @@map("playlists")
+}
+
+model PlaylistSongs{
+  playlistId String
+  playlist Playlist @relation(fields: [playlistId], references: [id])
+
+  musicId String
+  music Music @relation(fields: [musicId], references: [id], onDelete: Cascade)
+
+  @@id([playlistId, musicId])
+  @@map("playlist_songs")
+}
+
+model Searchable {
+  song_id       String   @id @default(uuid()) @map("song_id")
+  song_title    String   @db.VarChar(300) @map("song_title")
+  song_duration Decimal  @db.Decimal(10,2) @map("song_duration")
+  song_explicit Boolean  @map("song_explicit")
+  song_type     String?   @db.VarChar(25) @map("song_type")
+  album_id      String?   @map("album_id")
+  album_name    String?   @db.VarChar(300) @map("album_name")
+  album_img_url String?   @db.VarChar(150) @map("album_img_url")
+  artist_id     String?   @map("artist_id")
+  artist_name   String?   @db.VarChar(100) @map("artist_name")
+  artist_img_url String?  @db.VarChar(150) @map("artist_img_url")
+  search_field  String   @db.VarChar(1000) @map("search_field")
+
+  @@map("searchable")
+}
+
+model Recomendations {
+  userId String @unique()
+  user User @relation(fields: [userId], references: [id])
+
+  arrays_playlists String @db.VarChar()
+
+
+  @@map("recomendations")
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}

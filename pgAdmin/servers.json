@@ -1,0 +1,15 @@
+{
+    "Servers": {
+      "1": {
+        "Name": "PostgreSQL Database",
+        "Group": "Servers",
+        "Host": "harmoniq_db",
+        "Port": 5432,
+        "MaintenanceDB": "harmoniq",
+        "Username": "postgres",
+        "Password": "Harmoniq2@24",
+        "SSLMode": "prefer"
+      }
+    }
+  }
+  

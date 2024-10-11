@@ -1,0 +1,1739 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Harmonic",
+    "description": "Documetation",
+    "version": "1.0.0"
+  },
+  "host": "localhost:4444",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/api/v1/music/{id}": {
+      "get": {
+        "tags": [
+          "Music"
+        ],
+        "summary": "Stream music by ID.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID of the music. Example: 6d6d6ae4-6c83-4274-93b4-47ba8d9fd9a4"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Music not found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "value": {
+                          "type": "string",
+                          "example": "Music not found"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "value": {
+                          "type": "string",
+                          "example": "An error occurred while streaming the music"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/music/details/{id}": {
+      "get": {
+        "tags": [
+          "Music"
+        ],
+        "summary": "Get metadata of the music by ID.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID of the music. Example: 6d6d6ae4-6c83-4274-93b4-47ba8d9fd9a4"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful retrieval of music metadata",
+            "schema": {
+              "$ref": "#/definitions/Music"
+            }
+          },
+          "404": {
+            "description": "Music not found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "example": {
+                          "type": "string",
+                          "example": "Music not found"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "example": {
+                          "type": "string",
+                          "example": "An error occurred while retrieving the music metadata"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/music/search": {
+      "post": {
+        "tags": [
+          "Music"
+        ],
+        "summary": "Search music by title, album, or artist.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "body",
+            "description": "Query to search music by title, album, or artist",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SearchMusicRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful retrieval of music matching the search criteria",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "array"
+                },
+                "items": {
+                  "$ref": "#/definitions/MusicsSearch"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "value": {
+                          "type": "string",
+                          "example": "An error occurred while retrieving the music metadata"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/playlist/": {
+      "get": {
+        "tags": [
+          "Playlist"
+        ],
+        "summary": "List all playlists.",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "List of playlists.",
+            "schema": {
+              "$ref": "#/definitions/PlaylistArray"
+            }
+          },
+          "500": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "value": {
+                          "type": "string",
+                          "example": "Internal Server Error"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "501": {
+            "description": "Not Implemented"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Playlist"
+        ],
+        "summary": "Create a new playlist.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Playlist information.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/IPlaylistDTO"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Playlist created.",
+            "schema": {
+              "$ref": "#/definitions/Playlist"
+            }
+          },
+          "500": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "value": {
+                          "type": "string",
+                          "example": "Internal Server Error"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "501": {
+            "description": "Not Implemented"
+          }
+        }
+      }
+    },
+    "/api/v1/playlist/{playlistId}": {
+      "get": {
+        "tags": [
+          "Playlist"
+        ],
+        "summary": "Read a playlist by ID.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "playlistId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Playlist ID."
+          },
+          {
+            "name": "simplified",
+            "in": "query",
+            "description": "Simplified view.",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Playlist details.",
+            "schema": {
+              "$ref": "#/definitions/Playlist"
+            }
+          },
+          "500": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "value": {
+                          "type": "string",
+                          "example": "Internal Server Error"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "501": {
+            "description": "Not Implemented"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Playlist"
+        ],
+        "summary": "Update a playlist by ID.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "playlistId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Playlist ID."
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Playlist information.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/IPlaylistDTO"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Playlist updated.",
+            "schema": {
+              "$ref": "#/definitions/Playlist"
+            }
+          },
+          "500": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "value": {
+                          "type": "string",
+                          "example": "Internal Server Error"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "501": {
+            "description": "Not Implemented"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Playlist"
+        ],
+        "summary": "Remove a playlist by ID.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "playlistId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Playlist ID."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Playlist removed.",
+            "schema": {
+              "$ref": "#/definitions/Playlist"
+            }
+          },
+          "500": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "value": {
+                          "type": "string",
+                          "example": "Internal Server Error"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "501": {
+            "description": "Not Implemented"
+          }
+        }
+      }
+    },
+    "/api/v1/playlist/{playlistId}/{musicId}": {
+      "post": {
+        "tags": [
+          "Playlist"
+        ],
+        "summary": "Add a song to a playlist.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "playlistId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Playlist ID."
+          },
+          {
+            "name": "musicId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Music ID."
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Song added to playlist.",
+            "schema": {
+              "$ref": "#/definitions/SongPlay"
+            }
+          },
+          "500": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "value": {
+                          "type": "string",
+                          "example": "Internal Server Error"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "501": {
+            "description": "Not Implemented"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Playlist"
+        ],
+        "summary": "Remove a song from a playlist.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "playlistId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Playlist ID."
+          },
+          {
+            "name": "musicId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Music ID."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Song removed from playlist.",
+            "schema": {
+              "$ref": "#/definitions/SongPlay"
+            }
+          },
+          "500": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "value": {
+                          "type": "string",
+                          "example": "Internal Server Error"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "501": {
+            "description": "Not Implemented"
+          }
+        }
+      }
+    },
+    "/api/v1/user/": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Create a new user",
+        "description": "",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "User information.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserCreateDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/User"
+            },
+            "description": "User created."
+          },
+          "409": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "value": {
+                          "type": "string",
+                          "example": "User already created"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            },
+            "description": "Conflict"
+          },
+          "500": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "value": {
+                          "type": "string",
+                          "example": "Generic Error"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/v1/user/{id}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Find User by id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "User id."
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/User"
+            },
+            "description": "User informations."
+          },
+          "500": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "value": {
+                          "type": "string",
+                          "example": "Generic Error"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Update a user by id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "User id."
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User informations to update.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserUpdateDto"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Delete a user by id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "User id."
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/User"
+            },
+            "description": "User deleted."
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "value": {
+                          "type": "string",
+                          "example": "Generic Error"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/v1/authentication/signup": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Sign up a new user",
+        "description": "",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "User information.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserCreateDto"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User created.",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "value": {
+                          "type": "string",
+                          "example": "Generic Error"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/authentication/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Make user login.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Credentials",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Login"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/User"
+            },
+            "description": "User informations."
+          },
+          "401": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "value": {
+                          "type": "string",
+                          "example": "Unauthorized"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            },
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v1/authentication/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Logout the user",
+        "description": "",
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "value": {
+                          "type": "string",
+                          "example": "Ok"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            },
+            "description": "OK"
+          },
+          "403": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "value": {
+                          "type": "string",
+                          "example": "Forbidden"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            },
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/v1/authentication/check": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Check session status",
+        "description": "Returns the session UUID if the session is active.",
+        "responses": {
+          "200": {
+            "description": "The session is active, and the UUID is returned.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "uuid": {
+                  "type": "string",
+                  "example": "123e4567-e89b-12d3-a456-426614174000"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "No session found or session has expired.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "No session found"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/recommedations/playlists": {
+      "get": {
+        "tags": [
+          "Recommedations"
+        ],
+        "summary": "Return playlist recommendations to user.",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "List of playlists.",
+            "schema": {
+              "$ref": "#/definitions/PlaylistArray"
+            }
+          },
+          "500": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "value": {
+                          "type": "string",
+                          "example": "Internal Server Error"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "501": {
+            "description": "Not Implemented"
+          }
+        }
+      }
+    },
+    "/api/v1/recommedations/artists": {
+      "get": {
+        "tags": [
+          "Recommedations"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the list of recommended artists",
+            "schema": {
+              "$ref": "#/definitions/Artists"
+            }
+          },
+          "500": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "value": {
+                          "type": "string",
+                          "example": "Internal Server Error"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "501": {
+            "description": "Not Implemented"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Music": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "07M76e7IXxYdnC1BBiJxEX"
+        },
+        "title": {
+          "type": "string",
+          "example": "All The Man That I Need"
+        },
+        "duration": {
+          "type": "number",
+          "example": 211160
+        },
+        "url_music": {
+          "type": "string",
+          "example": "00.mp3"
+        },
+        "year": {
+          "type": "string",
+          "example": "2024-07-16T17:49:11.768Z"
+        },
+        "explicit": {
+          "type": "boolean",
+          "example": false
+        },
+        "song_type": {
+          "type": "string",
+          "example": "Solo"
+        },
+        "album": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "example": "5LaUUDnUTySWnJLj1xiBnw"
+            },
+            "name": {
+              "type": "string",
+              "example": "I'm Your Baby Tonight"
+            },
+            "img_url": {
+              "type": "string",
+              "example": "https://i.scdn.co/image/0221a0a50f3b59dda67fcbfd050614c246dd78bd"
+            }
+          }
+        },
+        "artist": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "example": "6XpaIBNiVzIetEPCWDvAFP"
+            },
+            "name": {
+              "type": "string",
+              "example": "Whitney Houston"
+            },
+            "img_url": {
+              "type": "string",
+              "example": "https://i.scdn.co/image/9cd1d09d5a351ca65c2f45246703614748ea9fed"
+            }
+          }
+        }
+      }
+    },
+    "Musics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "07M76e7IXxYdnC1BBiJxEX"
+          },
+          "title": {
+            "type": "string",
+            "example": "All The Man That I Need"
+          },
+          "duration": {
+            "type": "number",
+            "example": 211160
+          },
+          "url_music": {
+            "type": "string",
+            "example": "00.mp3"
+          },
+          "year": {
+            "type": "string",
+            "example": "2024-07-16T17:49:11.768Z"
+          },
+          "explicit": {
+            "type": "boolean",
+            "example": false
+          },
+          "song_type": {
+            "type": "string",
+            "example": "Solo"
+          },
+          "album": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "5LaUUDnUTySWnJLj1xiBnw"
+              },
+              "name": {
+                "type": "string",
+                "example": "I'm Your Baby Tonight"
+              },
+              "img_url": {
+                "type": "string",
+                "example": "https://i.scdn.co/image/0221a0a50f3b59dda67fcbfd050614c246dd78bd"
+              }
+            }
+          },
+          "artist": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "6XpaIBNiVzIetEPCWDvAFP"
+              },
+              "name": {
+                "type": "string",
+                "example": "Whitney Houston"
+              },
+              "img_url": {
+                "type": "string",
+                "example": "https://i.scdn.co/image/9cd1d09d5a351ca65c2f45246703614748ea9fed"
+              }
+            }
+          }
+        }
+      }
+    },
+    "MusicsSearch": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "07M76e7IXxYdnC1BBiJxEX"
+          },
+          "title": {
+            "type": "string",
+            "example": "All The Man That I Need"
+          },
+          "duration": {
+            "type": "number",
+            "example": 211160
+          },
+          "explicit": {
+            "type": "boolean",
+            "example": false
+          },
+          "song_type": {
+            "type": "string",
+            "example": "Solo"
+          },
+          "album": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "5LaUUDnUTySWnJLj1xiBnw"
+              },
+              "name": {
+                "type": "string",
+                "example": "I'm Your Baby Tonight"
+              },
+              "img_url": {
+                "type": "string",
+                "example": "https://i.scdn.co/image/0221a0a50f3b59dda67fcbfd050614c246dd78bd"
+              }
+            }
+          },
+          "artist": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "6XpaIBNiVzIetEPCWDvAFP"
+              },
+              "name": {
+                "type": "string",
+                "example": "Whitney Houston"
+              },
+              "img_url": {
+                "type": "string",
+                "example": "https://i.scdn.co/image/9cd1d09d5a351ca65c2f45246703614748ea9fed"
+              }
+            }
+          }
+        }
+      }
+    },
+    "SearchMusicRequest": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "example": "Bruno Mars"
+        }
+      }
+    },
+    "UserCreateDto": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "User Teste 1"
+        },
+        "email": {
+          "type": "string",
+          "example": "user.teste1@icomp.ufam.edu.br"
+        },
+        "birth": {
+          "type": "string",
+          "example": "1999-01-01"
+        },
+        "url_img_profile": {
+          "type": "string",
+          "example": ""
+        },
+        "password": {
+          "type": "string",
+          "example": "Harmonic123"
+        }
+      }
+    },
+    "UserUpdateDto": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "User Teste 1"
+        },
+        "birth": {
+          "type": "string",
+          "example": "2001-09-01"
+        },
+        "url_img_profile": {
+          "type": "string",
+          "example": ""
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "aacd282e-d07c-4bb4-9ebb-289c3f4cef75"
+        },
+        "name": {
+          "type": "string",
+          "example": "User Teste 1"
+        },
+        "email": {
+          "type": "string",
+          "example": "user.teste1@icomp.ufam.edu.br"
+        },
+        "birth": {
+          "type": "string",
+          "example": "1999-01-01T00:00:00.000Z"
+        },
+        "url_img_profile": {
+          "type": "string",
+          "example": ""
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2024-08-04T22:50:30.207Z"
+        },
+        "updatedAt": {
+          "type": "string",
+          "example": "2024-08-04T22:50:30.207Z"
+        }
+      }
+    },
+    "Login": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "user.teste1@icomp.ufam.edu.br"
+        },
+        "password": {
+          "type": "string",
+          "example": "Harmonic123"
+        }
+      }
+    },
+    "IPlaylistDTO": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "example": "Litters musics"
+        },
+        "describe": {
+          "type": "string",
+          "example": "heheheh"
+        }
+      }
+    },
+    "Playlist": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "c7923dc6-a324-4c2a-974e-7ca2e069d21b"
+        },
+        "title": {
+          "type": "string",
+          "example": "Litters musics"
+        },
+        "describe": {
+          "type": "string",
+          "example": "heheheh"
+        },
+        "url_cover": {}
+      }
+    },
+    "PlaylistArray": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1799358c-c8ec-4e8b-a441-0312c98c0132"
+          },
+          "title": {
+            "type": "string",
+            "example": "Tenho pouco a dizer"
+          },
+          "describe": {
+            "type": "string",
+            "example": "dsadsda"
+          },
+          "url_cover": {
+            "type": "string",
+            "example": ""
+          },
+          "length": {
+            "type": "number",
+            "example": 0
+          },
+          "total_time": {
+            "type": "number",
+            "example": 0
+          }
+        }
+      }
+    },
+    "SongPlay": {
+      "type": "object",
+      "properties": {
+        "playlistId": {
+          "type": "string",
+          "example": "c89aef32-afc6-4888-8b7d-d87d064f7a39"
+        },
+        "musicId": {
+          "type": "string",
+          "example": "b2d20562-620f-4ab5-8a08-61f305987b52"
+        },
+        "music": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "example": "b2d20562-620f-4ab5-8a08-61f305987b52"
+            },
+            "title": {
+              "type": "string",
+              "example": "Stole the Show"
+            },
+            "url_music": {
+              "type": "string",
+              "example": "00.mp3"
+            },
+            "duration": {
+              "type": "string",
+              "example": "223186"
+            },
+            "year": {
+              "type": "string",
+              "example": "2024-07-16T17:49:11.768Z"
+            }
+          }
+        }
+      }
+    },
+    "Artist": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "54d5s4d5a4ds5646sa"
+        },
+        "name": {
+          "type": "string",
+          "example": "dsadsdasds"
+        },
+        "image_url": {
+          "type": "string",
+          "example": ""
+        }
+      }
+    },
+    "Artists": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "54d5s4d5a4ds5646sa"
+          },
+          "name": {
+            "type": "string",
+            "example": "dsadsdasds"
+          },
+          "image_url": {
+            "type": "string",
+            "example": ""
+          }
+        }
+      }
+    }
+  }
+}

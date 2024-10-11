@@ -1,0 +1,95 @@
+services:
+  dev_backend:
+    container_name: backend_harmoniq
+    build:
+      context: ./backend
+    volumes:
+      - ./backend:/app
+    ports:
+      - ${BACK_PORT_OUT}:4444
+      - 443:443
+    command: /app/run.sh
+    networks:
+      - harmoniq_network
+    depends_on:
+      harmoniq_db:
+        condition: service_healthy
+    healthcheck:
+      test: 
+        ["CMD-SHELL", "curl -f http://localhost:4444/api || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  dev_frontend:
+    container_name: frontend_harmoniq
+    build:
+      context: ./frontend
+    volumes:
+      - ./frontend:/app
+    ports:
+      - ${FRONT_PORT_OUT}:3000
+    command: npm run dev
+    networks:
+      - harmoniq_network
+    depends_on:
+      dev_backend:
+        condition: service_started
+
+  harmoniq_db:
+    container_name: harmoniq_db
+    image: postgres:12.19-alpine3.20
+    ports:
+      - ${POSTGRES_PORT_OUT}:5432
+    env_file:
+      - ./.env
+    volumes:
+      - vol_postgresql:/var/lib/postgresql/data
+    networks:
+      - harmoniq_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:8
+    ports:
+      - ${PGADMIN_PORT_OUT}:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      PGADMIN_CONFIG_SERVER_MODE: ${PGADMIN_SERVER_MODE}
+      MASTER_PASSWORD_REQUIRED: False
+    volumes:
+      - ./pgAdmin/servers.json:/pgadmin4/servers.json
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - harmoniq_network
+    depends_on:
+      harmoniq_db:
+        condition: service_healthy
+
+  recommendation:
+    container_name: recommendation
+    build:
+      context: ./recomendation
+    volumes:
+      - ./recomendation:/app
+    depends_on:
+      - dev_backend
+    command: python app.py
+    networks:
+      - harmoniq_network
+    restart: on-failure
+
+    
+volumes:
+  vol_postgresql:
+  pgadmin_data:
+
+networks:
+  harmoniq_network:
+    driver: bridge

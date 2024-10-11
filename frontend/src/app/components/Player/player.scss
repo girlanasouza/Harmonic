@@ -1,0 +1,40 @@
+.rhap_container {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+  font-family: inherit;
+  width: 100%;
+  padding: 3px 15px;
+  background-color: rgba(255, 255, 255, 0);
+}
+
+.rhap_additional-controls {
+  display: flex;
+  flex: 0.8 0 auto;
+  align-items: center;
+}
+
+.rhap_main-controls-button {
+  width: 36px;
+  height: 40px;
+}
+
+.rhap_main-controls {
+  height: 60px;
+}
+
+.rouded-icon {
+  border: 1px solid black;
+  padding: 8px;
+  border-radius: 50%;
+}
+
+.rhap_play-pause-button {
+  width: 40px;
+  height: 50px;
+}
+
+.next-prev-icon {
+  font-size: 30px;
+}
